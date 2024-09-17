@@ -1,128 +1,28 @@
-# Sorts
-## Challenge: Merge Sort Implementation
+# Sorting-Algorithms
+Includes counting sort O(n+k), Radix LSD sort O(nk), Merge Sort O(n log n), Quick Sort O(n Log n), Bubble sort O(n^2), selection sort O(n^2)
 
-Now that you're familiar with the Merge Sort algorithm, it's time to implement it in JavaScript. This algorithm is particularly efficient for large datasets, as it employs a divide-and-conquer strategy.
+About counting sort: No negative values allowed, must know highest and lowest values.
+Counting sort (sometimes referred to as ultra sort or math sort) is a sorting algorithm which (like bucket sort) takes advantage of knowing the range of the numbers in the array to be sorted (array A).
+Counting sort is a stable sort and has a running time of Θ(n+k), where n and k are the lengths of the arrays A (the input array) and C (the counting array), respectively. In order for this algorithm to be efficient, k must not be much larger than n.
 
-## Instructions
+![Alt text](http://i.imgur.com/yZXLIb4.jpg "Counting Sort")
 
-Implement a function called `mergeSort` that takes an array of numbers as an argument and returns a sorted array using the Merge Sort algorithm.
+About Radix LSD sort: Current implementation does not allow negative numbers. A least significant digit radix sort operates in O(nk) time, where n is the number of keys, and k is the average key length.
 
-### Function Signature
+![Alt text](http://i.imgur.com/g2Snlvp.jpg "Radix LSD Sort")
 
-```js
-/**
- * Sorts an array using the Merge Sort algorithm.
- * @param {number[]} array - The array to be sorted.
- * @returns {number[]} - The sorted array.
- */
-function mergeSort(array: number[]): number[]
-```
+About Merge sort:  is an O(n log n) comparison-based sorting algorithm. Divide and conquer algorithm. Conceptually, a merge sort works as follows: Divide the unsorted list into n sublists, each containing 1 element (a list of 1 element is considered sorted). Repeatedly merge sublists to produce new sorted sublists until there is only 1 sublist remaining. This will be the sorted list.
 
-### Examples
+![Alt text](http://i.imgur.com/vX2fqKS.png "Merge Sort")
 
-```js
-console.log(mergeSort([5, 4, 3, 2, 1])); // Output: [1, 2, 3, 4, 5]
-console.log(mergeSort([64, 34, 25, 12, 22, 11, 90])); // Output: [11, 12, 22, 25, 34, 64, 90]
-```
+About Quick sort: On the average, it has O(n log n) complexity, worst case O(n^2). The divide-and-conquer strategy is used in quicksort. Below the recursion step is described: 1) Choose a pivot value. We take the value of the middle element as pivot value, but it can be any value, which is in range of sorted values, even if it doesn't present in the array. 2) Partition. Rearrange elements in such a way, that all elements which are lesser than the pivot go to the left part of the array and all elements greater than the pivot, go to the right part of the array. Values equal to the pivot can stay in any part of the array. Notice, that array may be divided in non-equal parts. 3) Sort both parts. Apply quicksort algorithm recursively to the left and the right parts.
 
-### Constraints
+![Alt text](http://i.imgur.com/9m20krB.jpg "Quick Sort")
 
-- The input array can contain any number of elements.
-- The elements in the input array are unique and positive integers.
+About Bubble sort: O(n^2). Comparison based sorting algorithm that repeatedly steps through the list to be sorted, compares each pair of adjacent items and swaps them if they are in the wrong order.
 
-### Notes
+![Alt text](http://i.imgur.com/K0R4ROL.jpg "Bubble Sort")
 
-- The Merge Sort algorithm divides the input array into smaller sub-arrays, sorts them separately, and then merges them back together in the correct order.
+About Selection sort: Selection sort is an in-place comparison sort. It has O(n^2) complexity, making it inefficient on large lists, and generally performs worse than the similar insertion sort. Selection sort is noted for its simplicity, and also has performance advantages over more complicated algorithms in certain situations. The algorithm finds the minimum value, swaps it with the value in the first position, and repeats these steps for the remainder of the list. It does no more than n swaps, and thus is useful where swapping is very expensive.
 
-### Hints
-
-- Divide & Conquer: The key idea behind this algorithm is to recursively divide the array into two halves until the base case is reached (when the array has only one or zero elements). Then, merge the smaller arrays back together while sorting them.
-- Merge Function: Implement a helper function called `merge` that takes two sorted arrays and merges them into a single sorted array. This function is crucial for the merge step of the algorithm.
-- Recursive Sorting: In the main `mergeSort` function, divide the array into two halves and recursively sort each half. Then, use the `merge` function to merge the sorted halves.
-
-## Solutions
-
-<details>
-  <summary>Click For Solution</summary>
-
-```js
-function mergeSort(arr) {
-  if (arr.length <= 1) {
-    return arr;
-  }
-
-  const mid = Math.floor(arr.length / 2);
-  const left = mergeSort(arr.slice(0, mid));
-  const right = mergeSort(arr.slice(mid));
-
-  return merge(left, right);
-}
-
-function merge(left, right) {
-  const merged = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
-      merged.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      merged.push(right[rightIndex]);
-      rightIndex++;
-    }
-  }
-
-  return merged.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-}
-```
-
-### Explanation
-
-- The `mergeSort` function is the main sorting function that implements the merge sort algorithm.
-- If the length of the array is 1 or less, it is already sorted, so we return the array as is.
-- Otherwise, we calculate the midpoint of the array using `Math.floor(arr.length / 2)`.
-- We recursively call `mergeSort` on the left half and the right half of the array.
-- Finally, we merge the sorted left and right halves using the `merge` function.
-
-- The `merge` function takes two sorted arrays as input and merges them into a single sorted array.
-- We initialize an empty array called `merged` to store the merged elements.
-- We also initialize two indices: `leftIndex` for the left array and `rightIndex` for the right array.
-- We iterate through both arrays while comparing the elements at the current indices.
-- If the element from the left array is smaller, we push it into the `merged` array and increment `leftIndex`.
-- If the element from the right array is smaller, we push it into the `merged` array and increment `rightIndex`.
-- After the loop, we concatenate any remaining elements from both arrays (if any).
-- We return the merged array.
-
-### Test Cases
-
-```js
-test('Sort an array in ascending order', () => {
-  const unsortedArray = [5, 2, 8, 1, 3];
-  const sortedArray = [1, 2, 3, 5, 8];
-  expect(mergeSort(unsortedArray)).toEqual(sortedArray);
-});
-
-test('Sort an array with repeated values', () => {
-  const unsortedArray = [4, 1, 3, 4, 2, 2];
-  const sortedArray = [1, 2, 2, 3, 4, 4];
-  expect(mergeSort(unsortedArray)).toEqual(sortedArray);
-});
-
-test('Sort an already sorted array', () => {
-  const sortedArray = [1, 2, 3, 4, 5];
-  expect(mergeSort(sortedArray)).toEqual(sortedArray);
-});
-
-test('Sort an array with one element', () => {
-  const singleElementArray = [42];
-  expect(mergeSort(singleElementArray)).toEqual(singleElementArray);
-});
-
-test('Sort an empty array', () => {
-  const emptyArray = [];
-  expect(mergeSort(emptyArray)).toEqual(emptyArray);
-});
-```
-
-Feel free to customize the test cases according to your needs!
+![Alt text](http://i.imgur.com/rnRfumw.jpg "Selection Sort")
